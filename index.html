@@ -9,6 +9,9 @@
 <meta property="og:title" content="Shaurya Srivastav — SEO | Learning Prompt Engineering">
 <meta property="og:description" content="SEO in New Delhi. On-page, off-page and technical SEO, keyword research. Some knowledge of data analytics, learning prompt engineering. I learn SEO by running my own site.">
 <meta property="og:type" content="profile">
+<meta property="og:url" content="https://shauryasrivas.github.io/">
+<meta property="og:image" content="https://shauryasrivas.github.io/photo.png">
+<link rel="canonical" href="https://shauryasrivas.github.io/">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -157,9 +160,6 @@
             <dd><span class="pill pill-green">Open to work</span></dd>
           </div>
         </dl>
-        <p class="note">
-          Phone number is deliberately left off — keep it in your resume PDF only.
-        </p>
       </aside>
     </div>
   </div>
@@ -512,7 +512,12 @@
         <p class="note">Typical reply time: within 24 hours.</p>
       </div>
 
-      <form class="card contact-form reveal" action="https://formspree.io/f/your-form-id" method="POST">
+      <form class="card contact-form reveal" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="134a26e1-a760-460a-8963-fbca7b7abdff">
+        <input type="hidden" name="subject" value="New message from your portfolio site">
+        <input type="hidden" name="from_name" value="Portfolio Contact Form">
+        <input type="hidden" name="redirect" value="https://web3forms.com/success">
+        <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true" style="display:none">
         <div class="field">
           <label for="cf-name">Name</label>
           <input id="cf-name" name="name" type="text" required placeholder="Your name">
@@ -526,7 +531,7 @@
           <textarea id="cf-msg" name="message" rows="5" required placeholder="What would you like to talk about?"></textarea>
         </div>
         <button class="btn btn-primary btn-block" type="submit">Send message</button>
-        <p class="note">A static site can't send email on its own. Point <code>action</code> at a free form service such as Formspree, Getform, or Web3Forms.</p>
+        <p class="note">Messages come straight to my inbox. I usually reply within 24 hours.</p>
       </form>
     </div>
   </div>
