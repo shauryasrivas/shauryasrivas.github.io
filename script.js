@@ -20,7 +20,7 @@
 
   var saved = null;
   try { saved = localStorage.getItem('theme'); } catch (e) {}
-  root.setAttribute('data-theme', saved || systemTheme());
+  root.setAttribute('data-theme', saved || 'dark');
 
   if (toggle) {
     toggle.addEventListener('click', function () {
