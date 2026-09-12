@@ -1141,27 +1141,6 @@ code {
        ghost numerals
    --------------------------------------------------------- */
 
-/* 22.1 Intro curtain */
-.preloader {
-  position: fixed; inset: 0; z-index: 500;
-  display: grid; place-items: center;
-  background: var(--canvas);
-  transition: transform 1s cubic-bezier(.76,0,.24,1);
-}
-.preloader.done { transform: translateY(-101%); }
-.pre-inner { display: grid; justify-items: center; gap: 18px; }
-.pre-label {
-  font-family: var(--mono); font-size: 11.5px;
-  letter-spacing: .3em; text-transform: uppercase;
-  color: var(--text-3);
-}
-.pre-bar {
-  display: block; width: clamp(160px, 30vw, 320px); height: 2px;
-  background: var(--border-2); overflow: hidden; border-radius: 2px;
-}
-.pre-bar i { display: block; height: 100%; width: 0%; background: var(--grad); }
-html.locked, html.locked body { overflow: hidden; }
-
 /* 22.2 Custom cursor (desktop only, switched on by JS) */
 .cursor-dot, .cursor-ring {
   position: fixed; top: 0; left: 0; z-index: 450;
@@ -1290,7 +1269,6 @@ html.is-ready .kinetic .kl {
 }
 @media (prefers-reduced-motion: reduce) {
   .kinetic .kl { opacity: 1 !important; transform: none !important; filter: none !important; animation: none !important; }
-  .preloader { display: none !important; }
   .cursor-dot, .cursor-ring { display: none !important; }
   .ghost-num { transform: none !important; }
 }
@@ -1417,4 +1395,48 @@ html.is-ready .kinetic .kl {
 @media (prefers-reduced-motion: reduce) {
   .mesh span { animation: none !important; }
   .reveal-up { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
+
+/* ---------------------------------------------------------
+   24. POLISH - scroll progress, card glow, selection, focus
+   --------------------------------------------------------- */
+
+/* 24.1 Scroll progress line */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; z-index: 300;
+  height: 2px; width: 100%;
+  transform: scaleX(0); transform-origin: 0 50%;
+  background: var(--grad);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* 24.2 Cards get a soft accent glow on hover */
+.card { transition: transform .45s var(--ease), border-color .35s var(--ease), box-shadow .45s var(--ease); }
+.card:hover {
+  border-color: color-mix(in srgb, var(--accent) 42%, var(--border-2));
+  box-shadow: 0 22px 60px -28px color-mix(in srgb, var(--accent) 55%, transparent),
+              0 2px 0 0 color-mix(in srgb, var(--accent) 12%, transparent) inset;
+}
+
+/* 24.3 Text selection + focus ring */
+::selection { background: color-mix(in srgb, var(--accent) 34%, transparent); color: var(--text); }
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* 24.4 Slimmer, themed scrollbar */
+* { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 45%, transparent) transparent; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--accent) 40%, transparent);
+  border: 3px solid transparent; background-clip: content-box; border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--accent) 65%, transparent); background-clip: content-box; }
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-progress { display: none; }
 }

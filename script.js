@@ -382,35 +382,8 @@
   var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
   var root = document.documentElement;
 
-  /* ---------- 1. Intro curtain ---------- */
-  var pre = document.getElementById('preloader');
-  var bar = document.getElementById('preBar');
-
-  function finishIntro() {
-    root.classList.remove('locked');
-    root.classList.add('is-ready');
-    if (pre) {
-      pre.classList.add('done');
-      window.setTimeout(function () { if (pre.parentNode) pre.parentNode.removeChild(pre); }, 1100);
-    }
-  }
-
-  if (!pre || reduce.matches) {
-    if (pre) pre.parentNode.removeChild(pre);
-    root.classList.add('is-ready');
-  } else {
-    root.classList.add('locked');
-    var pct = 0;
-    var tick = window.setInterval(function () {
-      pct = Math.min(pct + Math.random() * 11 + 4, 100);
-      if (bar) bar.style.width = pct + '%';
-      if (pct >= 100) {
-        window.clearInterval(tick);
-        window.setTimeout(finishIntro, 260);
-      }
-    }, 90);
-    window.setTimeout(function () { window.clearInterval(tick); finishIntro(); }, 4000);
-  }
+  /* ---------- 1. Page is interactive immediately (no intro curtain) ---------- */
+  root.classList.add('is-ready');
 
   /* ---------- 2. Custom cursor ---------- */
   var dot = document.getElementById('cursorDot');
@@ -500,4 +473,26 @@
       card.addEventListener('mouseleave', function () { card.style.transform = ''; });
     });
   }
+})();
+
+/* =========================================================
+   SCROLL PROGRESS LINE
+   ========================================================= */
+(function () {
+  var el = document.getElementById('scrollProgress');
+  if (!el) return;
+  var ticking = false;
+
+  function update() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
+    el.style.transform = 'scaleX(' + pct.toFixed(4) + ')';
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
+  }, { passive: true });
+  window.addEventListener('resize', update);
+  update();
 })();
