@@ -304,3 +304,79 @@
     }
   }
 })();
+
+/* =========================================================
+   MODERN LAYER - kinetic headline, card spotlight, magnetic buttons
+   ========================================================= */
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---------- 1. Split the headline into animated words ---------- */
+  var h1 = document.querySelector('h1.kinetic');
+  if (h1 && !reduce.matches) {
+    var nodes = [].slice.call(h1.childNodes);
+    var frag = document.createDocumentFragment();
+    var i = 0;
+
+    nodes.forEach(function (node) {
+      if (node.nodeType === 3) {
+        var parts = node.textContent.split(/(\s+)/);
+        parts.forEach(function (part) {
+          if (part === '') return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+          var w = document.createElement('span');
+          w.className = 'kw';
+          w.style.setProperty('--i', i++);
+          w.textContent = part;
+          frag.appendChild(w);
+        });
+      } else if (node.nodeName === 'BR') {
+        frag.appendChild(node.cloneNode(false));
+      } else {
+        var wrap = document.createElement('span');
+        wrap.className = 'kw';
+        wrap.style.setProperty('--i', i++);
+        wrap.appendChild(node.cloneNode(true));
+        frag.appendChild(wrap);
+      }
+    });
+
+    h1.textContent = '';
+    h1.appendChild(frag);
+  }
+
+  /* ---------- 2. Cursor spotlight on cards ---------- */
+  var cards = [].slice.call(document.querySelectorAll('.card'));
+  var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+
+  if (cards.length && finePointer.matches && !reduce.matches) {
+    cards.forEach(function (card) {
+      card.addEventListener('mousemove', function (e) {
+        var r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+      card.addEventListener('mouseleave', function () {
+        card.style.removeProperty('--mx');
+        card.style.removeProperty('--my');
+      });
+    });
+  }
+
+  /* ---------- 3. Magnetic hero buttons ---------- */
+  var mags = [].slice.call(document.querySelectorAll('.hero-btns .btn'));
+
+  if (mags.length && finePointer.matches && !reduce.matches) {
+    mags.forEach(function (btn) {
+      btn.addEventListener('mousemove', function (e) {
+        var r = btn.getBoundingClientRect();
+        var dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+        var dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+        btn.style.transform = 'translate(' + (dx * 5).toFixed(2) + 'px,' + (dy * 4).toFixed(2) + 'px)';
+      });
+      btn.addEventListener('mouseleave', function () {
+        btn.style.transform = '';
+      });
+    });
+  }
+})();
