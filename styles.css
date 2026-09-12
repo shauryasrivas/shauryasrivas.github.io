@@ -23,7 +23,7 @@
 
   --accent:      #8B7CFF;
   --accent-2:    #34D8FE;
-  --accent-3:    #FF7CAB;
+  --accent-3:    #7884FF;
   --accent-soft: rgba(139,124,255,.14);
   --accent-line: rgba(139,124,255,.34);
   --btn-text:    #0A0B0D;
@@ -69,7 +69,7 @@
 
   --accent:      #5B45E0;
   --accent-2:    #0891B2;
-  --accent-3:    #DB2777;
+  --accent-3:    #4F46E5;
   --accent-soft: rgba(91,69,224,.09);
   --accent-line: rgba(91,69,224,.28);
   --btn-text:    #FFFFFF;
@@ -371,7 +371,7 @@ code {
 }
 .hero-bg .orb-3 {
   width: 380px; height: 380px; bottom: -180px; left: 38%;
-  background: radial-gradient(circle at 50% 50%, rgba(255,124,171,.40), transparent 68%);
+  background: radial-gradient(circle at 50% 50%, rgba(120,132,255,.40), transparent 68%);
   animation: drift3 28s ease-in-out infinite alternate;
 }
 [data-theme="light"] .hero-bg .orb { opacity: .34; }
@@ -1155,13 +1155,6 @@ code {
   letter-spacing: .3em; text-transform: uppercase;
   color: var(--text-3);
 }
-.pre-count {
-  font-size: clamp(64px, 14vw, 152px);
-  font-weight: 600; letter-spacing: -.05em; line-height: 1;
-  background: var(--grad); -webkit-background-clip: text; background-clip: text;
-  color: transparent;
-  font-variant-numeric: tabular-nums;
-}
 .pre-bar {
   display: block; width: clamp(160px, 30vw, 320px); height: 2px;
   background: var(--border-2); overflow: hidden; border-radius: 2px;
@@ -1334,7 +1327,7 @@ html.is-ready .kinetic .kl {
 }
 .mesh .m3 {
   width: 38vw; height: 38vw; bottom: 6%; left: 22%;
-  background: radial-gradient(circle at 50% 50%, rgba(255,124,171,.52), transparent 70%);
+  background: radial-gradient(circle at 50% 50%, rgba(120,132,255,.46), transparent 70%);
   animation: meshC 42s ease-in-out infinite alternate;
 }
 .mesh .m4 {

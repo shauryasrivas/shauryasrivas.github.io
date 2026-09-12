@@ -384,7 +384,6 @@
 
   /* ---------- 1. Intro curtain ---------- */
   var pre = document.getElementById('preloader');
-  var count = document.getElementById('preCount');
   var bar = document.getElementById('preBar');
 
   function finishIntro() {
@@ -404,8 +403,6 @@
     var pct = 0;
     var tick = window.setInterval(function () {
       pct = Math.min(pct + Math.random() * 11 + 4, 100);
-      var shown = Math.floor(pct);
-      if (count) count.textContent = shown < 10 ? '0' + shown : String(shown);
       if (bar) bar.style.width = pct + '%';
       if (pct >= 100) {
         window.clearInterval(tick);
