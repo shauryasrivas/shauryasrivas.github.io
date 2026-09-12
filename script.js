@@ -311,38 +311,30 @@
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  /* ---------- 1. Split the headline into animated words ---------- */
+  /* ---------- 1. Split the headline into animated letters ---------- */
   var h1 = document.querySelector('h1.kinetic');
   if (h1 && !reduce.matches) {
-    var nodes = [].slice.call(h1.childNodes);
+    var text = h1.textContent.trim();
     var frag = document.createDocumentFragment();
     var i = 0;
 
-    nodes.forEach(function (node) {
-      if (node.nodeType === 3) {
-        var parts = node.textContent.split(/(\s+)/);
-        parts.forEach(function (part) {
-          if (part === '') return;
-          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
-          var w = document.createElement('span');
-          w.className = 'kw';
-          w.style.setProperty('--i', i++);
-          w.textContent = part;
-          frag.appendChild(w);
-        });
-      } else if (node.nodeName === 'BR') {
-        frag.appendChild(node.cloneNode(false));
-      } else {
-        var wrap = document.createElement('span');
-        wrap.className = 'kw';
-        wrap.style.setProperty('--i', i++);
-        wrap.appendChild(node.cloneNode(true));
-        frag.appendChild(wrap);
-      }
+    text.split(' ').forEach(function (word, wi) {
+      if (wi > 0) frag.appendChild(document.createTextNode(' '));
+      var wrap = document.createElement('span');
+      wrap.className = 'kword';
+      word.split('').forEach(function (ch) {
+        var l = document.createElement('span');
+        l.className = 'kl';
+        l.style.setProperty('--i', i++);
+        l.textContent = ch;
+        wrap.appendChild(l);
+      });
+      frag.appendChild(wrap);
     });
 
     h1.textContent = '';
     h1.appendChild(frag);
+    h1.setAttribute('aria-label', text);
   }
 
   /* ---------- 2. Cursor spotlight on cards ---------- */
@@ -377,6 +369,138 @@
       btn.addEventListener('mouseleave', function () {
         btn.style.transform = '';
       });
+    });
+  }
+})();
+
+/* =========================================================
+   BOLD LAYER - intro curtain, custom cursor, ghost numerals,
+   headline sheen, card tilt
+   ========================================================= */
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var fine = window.matchMedia('(hover: hover) and (pointer: fine)');
+  var root = document.documentElement;
+
+  /* ---------- 1. Intro curtain ---------- */
+  var pre = document.getElementById('preloader');
+  var count = document.getElementById('preCount');
+  var bar = document.getElementById('preBar');
+
+  function finishIntro() {
+    root.classList.remove('locked');
+    root.classList.add('is-ready');
+    if (pre) {
+      pre.classList.add('done');
+      window.setTimeout(function () { if (pre.parentNode) pre.parentNode.removeChild(pre); }, 1100);
+    }
+  }
+
+  if (!pre || reduce.matches) {
+    if (pre) pre.parentNode.removeChild(pre);
+    root.classList.add('is-ready');
+  } else {
+    root.classList.add('locked');
+    var pct = 0;
+    var tick = window.setInterval(function () {
+      pct = Math.min(pct + Math.random() * 11 + 4, 100);
+      var shown = Math.floor(pct);
+      if (count) count.textContent = shown < 10 ? '0' + shown : String(shown);
+      if (bar) bar.style.width = pct + '%';
+      if (pct >= 100) {
+        window.clearInterval(tick);
+        window.setTimeout(finishIntro, 260);
+      }
+    }, 90);
+    window.setTimeout(function () { window.clearInterval(tick); finishIntro(); }, 4000);
+  }
+
+  /* ---------- 2. Custom cursor ---------- */
+  var dot = document.getElementById('cursorDot');
+  var ring = document.getElementById('cursorRing');
+
+  if (dot && ring && fine.matches && !reduce.matches) {
+    root.classList.add('cursor-on');
+    var tx = window.innerWidth / 2, ty = window.innerHeight / 2;
+    var rx = tx, ry = ty;
+
+    document.addEventListener('mousemove', function (e) {
+      tx = e.clientX; ty = e.clientY;
+      dot.style.transform = 'translate(' + (tx - 3.5) + 'px,' + (ty - 3.5) + 'px)';
+    });
+
+    (function loop() {
+      rx += (tx - rx) * 0.16;
+      ry += (ty - ry) * 0.16;
+      ring.style.transform = 'translate(' + (rx - 19) + 'px,' + (ry - 19) + 'px)';
+      window.requestAnimationFrame(loop);
+    })();
+
+    var hot = 'a, button, .card, input, textarea, .cert-view';
+    document.querySelectorAll(hot).forEach(function (el) {
+      el.addEventListener('mouseenter', function () { ring.classList.add('is-hot'); });
+      el.addEventListener('mouseleave', function () { ring.classList.remove('is-hot'); });
+    });
+  } else if (dot && ring) {
+    dot.parentNode.removeChild(dot);
+    ring.parentNode.removeChild(ring);
+  }
+
+  /* ---------- 3. Ghost section numerals ---------- */
+  var sections = [].slice.call(document.querySelectorAll('.section'));
+  var ghosts = [];
+
+  sections.forEach(function (sec) {
+    var kicker = sec.querySelector('.kicker');
+    if (!kicker) return;
+    var m = kicker.textContent.match(/\d+/);
+    if (!m) return;
+    var g = document.createElement('span');
+    g.className = 'ghost-num';
+    g.setAttribute('aria-hidden', 'true');
+    g.textContent = m[0];
+    sec.insertBefore(g, sec.firstChild);
+    ghosts.push({ el: g, sec: sec });
+  });
+
+  /* ---------- 4. Headline sheen + ghost parallax on scroll ---------- */
+  var hero = document.querySelector('.hero h1.mega');
+
+  if (hero && fine.matches && !reduce.matches) {
+    document.addEventListener('mousemove', function (e) {
+      hero.style.setProperty('--sx', e.clientX + 'px');
+      hero.style.setProperty('--sy', e.clientY + 'px');
+    });
+  }
+
+  if (ghosts.length && !reduce.matches) {
+    var ticking = false;
+    function paintGhosts() {
+      var vh = window.innerHeight;
+      ghosts.forEach(function (g) {
+        var r = g.sec.getBoundingClientRect();
+        if (r.bottom < -200 || r.top > vh + 200) return;
+        var progress = (vh - r.top) / (vh + r.height);
+        g.el.style.transform = 'translate3d(0,' + (progress * 150 - 40).toFixed(1) + 'px,0)';
+      });
+      ticking = false;
+    }
+    window.addEventListener('scroll', function () {
+      if (!ticking) { ticking = true; window.requestAnimationFrame(paintGhosts); }
+    }, { passive: true });
+    paintGhosts();
+  }
+
+  /* ---------- 5. Subtle 3D tilt on cards ---------- */
+  if (fine.matches && !reduce.matches) {
+    document.querySelectorAll('.card').forEach(function (card) {
+      card.addEventListener('mousemove', function (e) {
+        var r = card.getBoundingClientRect();
+        var dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+        var dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+        card.style.transform = 'perspective(900px) rotateY(' + (dx * 3).toFixed(2) + 'deg) rotateX(' + (-dy * 3).toFixed(2) + 'deg) translateY(-4px)';
+      });
+      card.addEventListener('mouseleave', function () { card.style.transform = ''; });
     });
   }
 })();

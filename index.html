@@ -21,6 +21,21 @@
 </head>
 <body>
 
+<noscript><style>.preloader{display:none!important}.kinetic .kl{opacity:1!important;transform:none!important;filter:none!important}</style></noscript>
+
+<!-- ============ INTRO CURTAIN ============ -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pre-inner">
+    <span class="pre-label">Shaurya Srivastav</span>
+    <span class="pre-count" id="preCount">00</span>
+    <span class="pre-bar"><i id="preBar"></i></span>
+  </div>
+</div>
+
+<!-- ============ CUSTOM CURSOR ============ -->
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
 <a class="skip-link" href="#main">Skip to content</a>
 
 <div class="scroll-progress" id="scrollProgress" aria-hidden="true"><i></i></div>
@@ -69,7 +84,7 @@
   <div class="container hero-inner">
     <div class="hero-copy reveal px-layer" data-px="-0.14">
       <p class="eyebrow"><span class="dot"></span> Open to work · New Delhi · On-site or hybrid</p>
-      <h1 class="kinetic">Hi, I'm <span class="accent">Shaurya Srivastav</span>.<br>I do SEO.</h1>
+      <h1 class="kinetic mega" id="heroTitle">Shaurya Srivastav.</h1>
       <p class="lede">
         I work across on-page, off-page and technical SEO, with a focus on keyword
         research. Rather than learning from courses alone, I built and run my own site
@@ -109,8 +124,13 @@
 </section>
 
 <!-- ============ MARQUEE TICKER ============ -->
-<div class="marquee" aria-hidden="true">
-  <div class="marquee-track"><span class="marquee-group"><span class="marquee-item">On-Page SEO</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Technical SEO</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Keyword Research</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Site Audits</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Search Console</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Semrush</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Core Web Vitals</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Schema.org</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Power BI</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Prompt Engineering</span><span class="marquee-sep" aria-hidden="true">&#9670;</span></span><span class="marquee-group"><span class="marquee-item">On-Page SEO</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Technical SEO</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Keyword Research</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Site Audits</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Search Console</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Semrush</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Core Web Vitals</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Schema.org</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Power BI</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Prompt Engineering</span><span class="marquee-sep" aria-hidden="true">&#9670;</span></span></div>
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee marquee--xl">
+    <div class="marquee-track"><span class="marquee-group"><span class="marquee-item">On-Page SEO</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Technical SEO</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Keyword Research</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Site Audits</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Search Console</span><span class="marquee-sep" aria-hidden="true">&#9670;</span></span><span class="marquee-group"><span class="marquee-item">On-Page SEO</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Technical SEO</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Keyword Research</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Site Audits</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Search Console</span><span class="marquee-sep" aria-hidden="true">&#9670;</span></span></div>
+  </div>
+  <div class="marquee marquee--sm marquee--rev">
+    <div class="marquee-track"><span class="marquee-group"><span class="marquee-item">Semrush</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Core Web Vitals</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Schema.org</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Power BI</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Prompt Engineering</span><span class="marquee-sep" aria-hidden="true">&#9670;</span></span><span class="marquee-group"><span class="marquee-item">Semrush</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Core Web Vitals</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Schema.org</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Power BI</span><span class="marquee-sep" aria-hidden="true">&#9670;</span><span class="marquee-item">Prompt Engineering</span><span class="marquee-sep" aria-hidden="true">&#9670;</span></span></div>
+  </div>
 </div>
 
 <!-- ============ ABOUT + PERSONAL DETAILS ============ -->

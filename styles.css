@@ -1135,3 +1135,169 @@ code {
   .project--featured::before { animation: none !important; }
   .card::after { display: none; }
 }
+
+/* ---------------------------------------------------------
+   22. BOLD LAYER - intro curtain, custom cursor, mega type,
+       ghost numerals
+   --------------------------------------------------------- */
+
+/* 22.1 Intro curtain */
+.preloader {
+  position: fixed; inset: 0; z-index: 500;
+  display: grid; place-items: center;
+  background: var(--canvas);
+  transition: transform 1s cubic-bezier(.76,0,.24,1);
+}
+.preloader.done { transform: translateY(-101%); }
+.pre-inner { display: grid; justify-items: center; gap: 18px; }
+.pre-label {
+  font-family: var(--mono); font-size: 11.5px;
+  letter-spacing: .3em; text-transform: uppercase;
+  color: var(--text-3);
+}
+.pre-count {
+  font-size: clamp(64px, 14vw, 152px);
+  font-weight: 600; letter-spacing: -.05em; line-height: 1;
+  background: var(--grad); -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+  font-variant-numeric: tabular-nums;
+}
+.pre-bar {
+  display: block; width: clamp(160px, 30vw, 320px); height: 2px;
+  background: var(--border-2); overflow: hidden; border-radius: 2px;
+}
+.pre-bar i { display: block; height: 100%; width: 0%; background: var(--grad); }
+html.locked, html.locked body { overflow: hidden; }
+
+/* 22.2 Custom cursor (desktop only, switched on by JS) */
+.cursor-dot, .cursor-ring {
+  position: fixed; top: 0; left: 0; z-index: 450;
+  pointer-events: none; opacity: 0;
+  border-radius: 50%;
+  mix-blend-mode: difference;
+}
+.cursor-dot { width: 7px; height: 7px; background: #fff; }
+.cursor-ring {
+  width: 38px; height: 38px;
+  border: 1px solid rgba(255,255,255,.6);
+  transition: width .25s var(--ease), height .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
+}
+html.cursor-on .cursor-dot, html.cursor-on .cursor-ring { opacity: 1; }
+html.cursor-on, html.cursor-on a, html.cursor-on button, html.cursor-on .card { cursor: none; }
+html.cursor-on input, html.cursor-on textarea { cursor: text; }
+.cursor-ring.is-hot {
+  width: 66px; height: 66px;
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.9);
+}
+
+/* 22.3 Mega headline with a sheen that tracks the cursor */
+.kword { display: inline-block; white-space: nowrap; }
+
+.hero h1.mega {
+  font-size: clamp(42px, 8.4vw, 116px);
+  line-height: .88;
+  letter-spacing: -.055em;
+  font-weight: 660;
+  margin-bottom: clamp(22px, 3vw, 38px);
+  max-width: none;
+  color: var(--text);
+}
+
+/* Gradient sheen lives on the letters, anchored to the viewport so it reads
+   as one continuous light source across the whole name. */
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  @media (min-width: 861px) {
+    .hero h1.mega .kl {
+      background-image: radial-gradient(560px circle at var(--sx, 22vw) var(--sy, 34vh), var(--accent-2) 0%, var(--accent) 34%, var(--text) 74%);
+      background-attachment: fixed;
+      -webkit-background-clip: text;
+              background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+    [data-theme="light"] .hero h1.mega .kl {
+      background-image: radial-gradient(560px circle at var(--sx, 22vw) var(--sy, 34vh), var(--accent-2) 0%, var(--accent) 30%, #0A0B0D 70%);
+    }
+  }
+}
+.kinetic .kl {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(.6em) rotate(4deg);
+  filter: blur(8px);
+}
+html.is-ready .kinetic .kl {
+  animation: klIn .8s cubic-bezier(.18,.72,0,1) forwards;
+  animation-delay: calc(var(--i) * 34ms);
+}
+@keyframes klIn { to { opacity: 1; transform: none; filter: blur(0); } }
+
+/* 22.4 Ghost section numerals */
+.section { position: relative; overflow: clip; }
+.ghost-num {
+  position: absolute;
+  top: -.18em; right: var(--gutter);
+  font-family: var(--mono);
+  font-size: clamp(140px, 26vw, 340px);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border-2);
+  opacity: .5;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  will-change: transform;
+}
+.section > .container { position: relative; z-index: 1; }
+
+/* 22.5 XL two-row marquee */
+.marquee-wrap {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: var(--canvas-2);
+  overflow: hidden;
+}
+.marquee-wrap .marquee {
+  border: 0;
+  background: none;
+  padding: 0;
+}
+.marquee--xl { padding: clamp(14px, 2vw, 26px) 0 0; }
+.marquee--xl .marquee-item {
+  font-family: var(--font);
+  font-size: clamp(38px, 7.4vw, 104px);
+  font-weight: 660;
+  letter-spacing: -.045em;
+  text-transform: none;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border-2);
+}
+.marquee--xl .marquee-sep {
+  margin: 0 clamp(16px, 2.4vw, 34px);
+  font-size: clamp(10px, 1.2vw, 16px);
+  color: var(--accent);
+  opacity: .85;
+}
+.marquee--xl .marquee-track { animation-duration: 30s; }
+
+.marquee--sm { padding: clamp(8px, 1.2vw, 16px) 0 clamp(14px, 2vw, 24px); }
+.marquee--sm .marquee-track { animation-duration: 26s; }
+.marquee--rev .marquee-track { animation-direction: reverse; }
+
+/* 22.6 3D tilt on cards (JS feeds the angles) */
+.card { transform-style: preserve-3d; }
+
+/* 22.7 Mobile + motion safety */
+@media (max-width: 700px) {
+  .ghost-num { font-size: clamp(96px, 32vw, 180px); opacity: .38; }
+  .marquee--xl .marquee-item { font-size: clamp(30px, 10vw, 52px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kinetic .kl { opacity: 1 !important; transform: none !important; filter: none !important; animation: none !important; }
+  .preloader { display: none !important; }
+  .cursor-dot, .cursor-ring { display: none !important; }
+  .ghost-num { transform: none !important; }
+}
