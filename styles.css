@@ -9,11 +9,11 @@
    --------------------------------------------------------- */
 :root {
   /* dark is the default surface */
-  --canvas:      #08090B;
-  --canvas-2:    #0C0E12;
-  --surface:     #101318;
-  --surface-2:   #161A21;
-  --surface-3:   #1C2129;
+  --canvas:      #0A0D14;
+  --canvas-2:    #0D111A;
+  --surface:     rgba(22,28,41,.58);
+  --surface-2:   rgba(30,37,52,.72);
+  --surface-3:   #232B3A;
   --border:      rgba(255,255,255,.09);
   --border-2:    rgba(255,255,255,.16);
 
@@ -55,10 +55,10 @@
 }
 
 [data-theme="light"] {
-  --canvas:      #FBFBFC;
+  --canvas:      #F6F7FB;
   --canvas-2:    #FFFFFF;
-  --surface:     #FFFFFF;
-  --surface-2:   #F4F4F6;
+  --surface:     rgba(255,255,255,.72);
+  --surface-2:   rgba(244,244,246,.82);
   --surface-3:   #EDEDF1;
   --border:      rgba(10,11,13,.10);
   --border-2:    rgba(10,11,13,.18);
@@ -1300,4 +1300,128 @@ html.is-ready .kinetic .kl {
   .preloader { display: none !important; }
   .cursor-dot, .cursor-ring { display: none !important; }
   .ghost-num { transform: none !important; }
+}
+
+/* ---------------------------------------------------------
+   23. ATMOSPHERE LAYER - mesh gradients, glassmorphism,
+       bento sizing, kinetic section headers
+   --------------------------------------------------------- */
+
+/* 23.1 Drifting mesh-gradient blobs behind the whole page */
+.mesh {
+  position: fixed;
+  inset: -25%;
+  z-index: 0;
+  pointer-events: none;
+  filter: blur(80px) saturate(140%);
+  opacity: 1;
+}
+.mesh span {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  will-change: transform;
+}
+.mesh .m1 {
+  width: 46vw; height: 46vw; top: 2%; left: -6%;
+  background: radial-gradient(circle at 40% 40%, rgba(139,124,255,.72), transparent 70%);
+  animation: meshA 30s ease-in-out infinite alternate;
+}
+.mesh .m2 {
+  width: 40vw; height: 40vw; top: 24%; right: -8%;
+  background: radial-gradient(circle at 55% 45%, rgba(52,216,254,.56), transparent 70%);
+  animation: meshB 36s ease-in-out infinite alternate;
+}
+.mesh .m3 {
+  width: 38vw; height: 38vw; bottom: 6%; left: 22%;
+  background: radial-gradient(circle at 50% 50%, rgba(255,124,171,.52), transparent 70%);
+  animation: meshC 42s ease-in-out infinite alternate;
+}
+.mesh .m4 {
+  width: 32vw; height: 32vw; bottom: 28%; right: 16%;
+  background: radial-gradient(circle at 50% 50%, rgba(124,255,214,.34), transparent 70%);
+  animation: meshD 34s ease-in-out infinite alternate;
+}
+[data-theme="light"] .mesh { opacity: .62; filter: blur(100px) saturate(120%); }
+
+@keyframes meshA { from { translate: 0 0; scale: 1; } to { translate: 8vw 6vh; scale: 1.15; } }
+@keyframes meshB { from { translate: 0 0; scale: 1.1; } to { translate: -7vw 9vh; scale: .95; } }
+@keyframes meshC { from { translate: 0 0; scale: 1; } to { translate: 6vw -8vh; scale: 1.2; } }
+@keyframes meshD { from { translate: 0 0; scale: 1.05; } to { translate: -9vw -5vh; scale: .9; } }
+
+/* content sits above the mesh */
+.nav, main, .site-footer, footer { position: relative; z-index: 2; }
+
+/* 23.2 Glassmorphism on every card surface */
+.card {
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+          backdrop-filter: blur(16px) saturate(150%);
+}
+.section-alt { background: transparent; }
+.marquee-wrap {
+  background: color-mix(in srgb, var(--canvas-2) 55%, transparent);
+  -webkit-backdrop-filter: blur(14px);
+          backdrop-filter: blur(14px);
+}
+
+/* 23.3 Bento sizing - one big feature tile, smaller supporting tiles */
+.skill-card:nth-child(1) { grid-column: span 4; }
+.skill-card:nth-child(2) { grid-column: span 2; }
+
+.certs-grid { grid-template-columns: repeat(6, 1fr); }
+.cert { grid-column: span 3; }
+.cert:nth-child(1) { grid-column: span 4; }
+.cert:nth-child(2) { grid-column: span 2; }
+.cert:nth-child(1) .cert-view { height: 240px; }
+
+/* 23.4 Hero stats become floating bento tiles */
+.hero-stats { border-top: 0; padding: 0; gap: 12px; }
+.hero-stats div {
+  padding: 16px 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+          backdrop-filter: blur(14px) saturate(140%);
+  transition: transform .35s var(--ease), border-color .35s var(--ease);
+}
+.hero-stats div:hover { transform: translateY(-3px); border-color: var(--accent-line); }
+
+/* 23.5 Oversized kinetic section headers with breathing room */
+.section { padding: clamp(80px, 11vw, 152px) 0; }
+.section-title { font-size: clamp(34px, 5.6vw, 74px); max-width: 20ch; }
+
+.reveal-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity .85s var(--ease-out), transform .85s var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 110ms);
+}
+.reveal-up.in { opacity: 1; transform: none; }
+
+/* 23.6 Glowing custom cursor */
+.cursor-dot {
+  box-shadow: 0 0 14px 4px rgba(139,124,255,.75);
+}
+.cursor-ring { border-color: rgba(139,124,255,.75); }
+.cursor-ring.is-hot { border-color: rgba(52,216,254,.95); background: rgba(139,124,255,.16); }
+
+/* 23.7 Responsive bento fallbacks */
+@media (max-width: 1024px) {
+  .skill-card:nth-child(1) { grid-column: span 4; }
+  .skill-card:nth-child(2) { grid-column: span 4; }
+  .certs-grid { grid-template-columns: repeat(4, 1fr); }
+  .cert, .cert:nth-child(1), .cert:nth-child(2) { grid-column: span 2; }
+  .cert:nth-child(1) .cert-view { height: 176px; }
+}
+@media (max-width: 700px) {
+  .certs-grid { grid-template-columns: 1fr; }
+  .cert, .cert:nth-child(1), .cert:nth-child(2) { grid-column: span 1; }
+  .mesh { filter: blur(70px) saturate(120%); opacity: .7; }
+}
+
+/* 23.8 Motion safety */
+@media (prefers-reduced-motion: reduce) {
+  .mesh span { animation: none !important; }
+  .reveal-up { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
