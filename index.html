@@ -23,6 +23,8 @@
 
 <a class="skip-link" href="#main">Skip to content</a>
 
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"><i></i></div>
+
 <!-- ============ NAVBAR ============ -->
 <header class="nav" id="nav">
   <div class="container nav-inner">
@@ -57,8 +59,14 @@
 
 <!-- ============ HERO ============ -->
 <section class="hero" id="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <span class="orb orb-1 px-layer" data-px="0.14"></span>
+    <span class="orb orb-2 px-layer" data-px="0.22"></span>
+    <span class="orb orb-3 px-layer" data-px="0.07"></span>
+    <div class="grid-lines px-layer" data-px="0.05"></div>
+  </div>
   <div class="container hero-inner">
-    <div class="hero-copy reveal">
+    <div class="hero-copy reveal px-layer" data-px="-0.07">
       <p class="eyebrow"><span class="dot"></span> Open to work · New Delhi · On-site or hybrid</p>
       <h1>Hi, I'm <span class="accent">Shaurya Srivastav</span>.<br>SEO enthusiast by doing it.</h1>
       <p class="lede">
@@ -82,7 +90,7 @@
       </ul>
     </div>
 
-    <div class="hero-photo reveal">
+    <div class="hero-photo reveal px-layer" data-px="-0.15">
       <div class="photo-frame">
         <picture>
           <source srcset="photo.webp" type="image/webp">
@@ -90,7 +98,7 @@
                alt="Portrait of Shaurya Srivastav in a navy blazer">
         </picture>
       </div>
-      <dl class="hero-stats">
+      <dl class="hero-stats reveal-stagger">
         <div><dt>Certifications</dt><dd>6</dd></div>
         <div><dt>Core skills</dt><dd>16</dd></div>
         <div><dt>Live sites</dt><dd>1</dd></div>

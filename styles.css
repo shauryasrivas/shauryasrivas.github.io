@@ -542,3 +542,126 @@ code { font-family: var(--mono); font-size: .875em; }
 .cert-open:hover { text-decoration: underline; }
 .cert-open span { display: inline-block; transition: transform .15s; }
 .cert-open:hover span { transform: translateX(3px); }
+
+/* =========================================================
+   PARALLAX + MOTION LAYER  (v3 — 12 Sep)
+   Purely additive. Fully disabled under prefers-reduced-motion.
+   ========================================================= */
+
+/* ---- Scroll progress bar ---- */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px;
+  z-index: 130; pointer-events: none; background: transparent;
+}
+.scroll-progress i {
+  display: block; height: 100%; width: 100%;
+  transform: scaleX(0); transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 45%, #9ad0ff));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* ---- Hero stage ---- */
+.hero { position: relative; overflow: hidden; isolation: isolate; }
+
+.hero-bg {
+  position: absolute; inset: -12% -8%; z-index: -1;
+  pointer-events: none; overflow: hidden;
+}
+
+.hero-bg .orb {
+  position: absolute; border-radius: 50%;
+  filter: blur(70px); opacity: .55;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+.hero-bg .orb-1 {
+  width: 460px; height: 460px; top: -40px; left: -90px;
+  background: radial-gradient(circle at 32% 32%, rgba(26,111,196,.50), transparent 70%);
+  animation: orbDrift1 18s ease-in-out infinite alternate;
+}
+.hero-bg .orb-2 {
+  width: 380px; height: 380px; top: 90px; right: -70px;
+  background: radial-gradient(circle at 60% 40%, rgba(94,159,232,.42), transparent 70%);
+  animation: orbDrift2 22s ease-in-out infinite alternate;
+}
+.hero-bg .orb-3 {
+  width: 320px; height: 320px; bottom: -140px; left: 44%;
+  background: radial-gradient(circle at 50% 50%, rgba(70,161,113,.34), transparent 70%);
+  animation: orbDrift3 26s ease-in-out infinite alternate;
+}
+[data-theme="dark"] .hero-bg .orb { opacity: .42; filter: blur(80px); }
+
+@keyframes orbDrift1 { from { translate: 0 0; } to { translate: 40px 30px; } }
+@keyframes orbDrift2 { from { translate: 0 0; } to { translate: -50px 24px; } }
+@keyframes orbDrift3 { from { translate: 0 0; } to { translate: 30px -34px; } }
+
+/* ---- Faint grid, masked to a soft ellipse ---- */
+.hero-bg .grid-lines {
+  position: absolute; inset: -20%;
+  background-image:
+    linear-gradient(to right, rgba(128,128,128,.11) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(128,128,128,.11) 1px, transparent 1px);
+  background-size: 62px 62px;
+  -webkit-mask-image: radial-gradient(ellipse 72% 62% at 50% 42%, #000 35%, transparent 100%);
+          mask-image: radial-gradient(ellipse 72% 62% at 50% 42%, #000 35%, transparent 100%);
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+[data-theme="dark"] .hero-bg .grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.08) 1px, transparent 1px);
+}
+
+/* ---- Parallax layers (JS sets --py) ---- */
+.hero-copy, .hero-photo { will-change: transform; }
+.px-layer { transform: translate3d(0, var(--py, 0px), 0); }
+
+/* ---- Photo: depth tilt + slow float ---- */
+.hero-photo { perspective: 900px; }
+.photo-frame {
+  transform: rotateX(var(--tx, 0deg)) rotateY(var(--ty, 0deg)) translateZ(0);
+  transition: transform .45s cubic-bezier(.22,.61,.36,1), box-shadow .45s ease;
+  will-change: transform;
+}
+.photo-frame.tilting { transition: transform .08s linear; }
+.hero-photo .photo-frame::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(125deg, rgba(255,255,255,.28), transparent 42%);
+  opacity: 0; transition: opacity .4s ease; pointer-events: none;
+}
+.hero-photo:hover .photo-frame::after { opacity: 1; }
+
+/* ---- Hero stats: count-up presentation ---- */
+.hero-stats dd { font-variant-numeric: tabular-nums; }
+
+/* ---- Section reveal upgrade: stagger children ---- */
+.reveal-stagger > * {
+  opacity: 0; transform: translateY(18px);
+  transition: opacity .55s cubic-bezier(.22,.61,.36,1), transform .55s cubic-bezier(.22,.61,.36,1);
+}
+.reveal-stagger.in > * { opacity: 1; transform: none; }
+.reveal-stagger.in > *:nth-child(1) { transition-delay: .04s; }
+.reveal-stagger.in > *:nth-child(2) { transition-delay: .12s; }
+.reveal-stagger.in > *:nth-child(3) { transition-delay: .20s; }
+.reveal-stagger.in > *:nth-child(4) { transition-delay: .28s; }
+.reveal-stagger.in > *:nth-child(5) { transition-delay: .36s; }
+.reveal-stagger.in > *:nth-child(6) { transition-delay: .44s; }
+
+/* ---- Phone: keep the look, drop the scroll maths ---- */
+@media (max-width: 700px) {
+  .hero-bg .orb-1 { width: 300px; height: 300px; }
+  .hero-bg .orb-2 { width: 260px; height: 260px; }
+  .hero-bg .orb-3 { display: none; }
+  .hero-bg .grid-lines { background-size: 44px 44px; }
+  .px-layer { transform: none !important; }
+}
+
+/* ---- Accessibility: motion off means motion off ---- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg .orb { animation: none !important; }
+  .px-layer { transform: none !important; }
+  .photo-frame { transform: none !important; }
+  .scroll-progress { display: none; }
+  .reveal-stagger > * { opacity: 1; transform: none; }
+}

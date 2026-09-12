@@ -176,3 +176,131 @@
     }
   });
 })();
+
+/* =========================================================
+   PARALLAX + MOTION LAYER  (v3 — 12 Sep)
+   Separate IIFE — does not touch the existing script above.
+   ========================================================= */
+(function () {
+  'use strict';
+
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var isPhone = function () { return window.matchMedia('(max-width: 700px)').matches; };
+
+  /* ---------- 1. Scroll progress bar ---------- */
+  var bar = document.querySelector('#scrollProgress i');
+
+  /* ---------- 2. Parallax layers ---------- */
+  var layers = [].slice.call(document.querySelectorAll('[data-px]'));
+  var hero = document.getElementById('hero');
+
+  var ticking = false;
+
+  function onFrame() {
+    ticking = false;
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+
+    if (bar) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = max > 0 ? Math.min(y / max, 1) : 0;
+      bar.style.transform = 'scaleX(' + pct.toFixed(4) + ')';
+    }
+
+    if (!reduce.matches && !isPhone() && hero) {
+      var h = hero.offsetHeight || 1;
+      if (y < h * 1.2) {
+        for (var i = 0; i < layers.length; i++) {
+          var depth = parseFloat(layers[i].getAttribute('data-px')) || 0;
+          layers[i].style.setProperty('--py', (y * depth).toFixed(2) + 'px');
+        }
+      }
+    }
+  }
+
+  function requestFrame() {
+    if (!ticking) { ticking = true; window.requestAnimationFrame(onFrame); }
+  }
+
+  window.addEventListener('scroll', requestFrame, { passive: true });
+  window.addEventListener('resize', requestFrame, { passive: true });
+  onFrame();
+
+  /* ---------- 3. Mouse tilt on the portrait ---------- */
+  var photoWrap = document.querySelector('.hero-photo');
+  var frame = document.querySelector('.photo-frame');
+
+  if (photoWrap && frame && !reduce.matches && window.matchMedia('(hover: hover)').matches) {
+    var tiltRaf = null;
+
+    photoWrap.addEventListener('mousemove', function (e) {
+      if (tiltRaf) return;
+      tiltRaf = window.requestAnimationFrame(function () {
+        tiltRaf = null;
+        var r = frame.getBoundingClientRect();
+        var px = (e.clientX - r.left) / r.width - 0.5;
+        var py = (e.clientY - r.top) / r.height - 0.5;
+        frame.classList.add('tilting');
+        frame.style.setProperty('--ty', (px * 9).toFixed(2) + 'deg');
+        frame.style.setProperty('--tx', (-py * 9).toFixed(2) + 'deg');
+      });
+    }, { passive: true });
+
+    photoWrap.addEventListener('mouseleave', function () {
+      frame.classList.remove('tilting');
+      frame.style.setProperty('--ty', '0deg');
+      frame.style.setProperty('--tx', '0deg');
+    });
+  }
+
+  /* ---------- 4. Hero stats count-up ---------- */
+  var stats = [].slice.call(document.querySelectorAll('.hero-stats dd'));
+
+  function countUp(el) {
+    var target = parseInt(el.textContent.trim(), 10);
+    if (isNaN(target)) return;
+    if (reduce.matches) { el.textContent = target; return; }
+
+    var dur = 900;
+    var start = null;
+    el.textContent = '0';
+
+    function step(ts) {
+      if (start === null) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(target * eased);
+      if (p < 1) window.requestAnimationFrame(step);
+      else el.textContent = target;
+    }
+    window.requestAnimationFrame(step);
+  }
+
+  if (stats.length) {
+    if (!('IntersectionObserver' in window) || reduce.matches) {
+      // leave the numbers as authored
+    } else {
+      var statObs = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { countUp(en.target); obs.unobserve(en.target); }
+        });
+      }, { threshold: 0.6 });
+      stats.forEach(function (s) { statObs.observe(s); });
+    }
+  }
+
+  /* ---------- 5. Staggered reveal for grouped blocks ---------- */
+  var groups = [].slice.call(document.querySelectorAll('.reveal-stagger'));
+
+  if (groups.length) {
+    if (!('IntersectionObserver' in window) || reduce.matches) {
+      groups.forEach(function (g) { g.classList.add('in'); });
+    } else {
+      var groupObs = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add('in'); obs.unobserve(en.target); }
+        });
+      }, { rootMargin: '0px 0px -12% 0px', threshold: 0.1 });
+      groups.forEach(function (g) { groupObs.observe(g); });
+    }
+  }
+})();
