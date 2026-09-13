@@ -141,21 +141,45 @@
     if (lastFocused) lastFocused.focus();
   }
 
-  /* Show the real certificate as the card thumbnail when the image exists */
-  document.querySelectorAll('.cert-view').forEach(function (btn) {
-    var src = btn.dataset.cert;
+  /* Card thumbnails: small webp, fetched only when the card nears the viewport */
+  function loadThumb(btn) {
+    if (btn.dataset.thumbDone) return;
+    var src = btn.dataset.thumb || btn.dataset.cert;
     if (!src) return;
+    btn.dataset.thumbDone = '1';
     var probe = new Image();
     probe.onload = function () {
       var slot = btn.querySelector('.cert-thumb');
       if (!slot) return;
       var img = new Image();
-      img.src = src;
+      img.decoding = 'async';
       img.alt = '';
+      img.width = probe.naturalWidth;
+      img.height = probe.naturalHeight;
+      img.src = src;
       slot.replaceWith(img);
     };
+    probe.onerror = function () {
+      if (btn.dataset.thumb) {
+        btn.removeAttribute('data-thumb');
+        btn.dataset.thumbDone = '';
+        loadThumb(btn);
+      }
+    };
     probe.src = src;
-  });
+  }
+
+  var certBtns = document.querySelectorAll('.cert-view');
+  if (!('IntersectionObserver' in window)) {
+    certBtns.forEach(loadThumb);
+  } else {
+    var thumbObs = new IntersectionObserver(function (entries, o) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { loadThumb(en.target); o.unobserve(en.target); }
+      });
+    }, { rootMargin: '500px 0px' });
+    certBtns.forEach(function (b) { thumbObs.observe(b); });
+  }
 
   document.querySelectorAll('.cert-view, .cert-open').forEach(function (btn) {
     btn.addEventListener('click', function () {

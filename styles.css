@@ -1341,9 +1341,6 @@ html.is-ready .kinetic .kl {
 
 .certs-grid { grid-template-columns: repeat(6, 1fr); }
 .cert { grid-column: span 3; }
-.cert:nth-child(1) { grid-column: span 4; }
-.cert:nth-child(2) { grid-column: span 2; }
-.cert:nth-child(1) .cert-view { height: 240px; }
 
 /* 23.4 Hero stats become floating bento tiles */
 .hero-stats { border-top: 0; padding: 0; gap: 12px; }
@@ -1382,12 +1379,11 @@ html.is-ready .kinetic .kl {
   .skill-card:nth-child(1) { grid-column: span 4; }
   .skill-card:nth-child(2) { grid-column: span 4; }
   .certs-grid { grid-template-columns: repeat(4, 1fr); }
-  .cert, .cert:nth-child(1), .cert:nth-child(2) { grid-column: span 2; }
-  .cert:nth-child(1) .cert-view { height: 176px; }
+  .cert { grid-column: span 2; }
 }
 @media (max-width: 700px) {
   .certs-grid { grid-template-columns: 1fr; }
-  .cert, .cert:nth-child(1), .cert:nth-child(2) { grid-column: span 1; }
+  .cert { grid-column: span 1; }
   .mesh { filter: blur(70px) saturate(120%); opacity: .7; }
 }
 
@@ -1439,4 +1435,16 @@ html.is-ready .kinetic .kl {
 
 @media (prefers-reduced-motion: reduce) {
   .scroll-progress { display: none; }
+}
+
+/* 24.5 Phone performance: blur and animation are expensive on mobile GPUs */
+@media (max-width: 700px) {
+  .card, .marquee-wrap, .hero-stats div {
+    -webkit-backdrop-filter: none;
+            backdrop-filter: none;
+  }
+  .card { background: var(--surface-3); }
+  .mesh { filter: blur(55px) saturate(120%); opacity: .55; }
+  .mesh span { animation: none; }
+  .mesh .m3, .mesh .m4 { display: none; }
 }
