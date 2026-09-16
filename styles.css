@@ -1450,383 +1450,74 @@ html.is-ready .kinetic .kl {
 }
 
 
-/* ---------------------------------------------------------
-   25. MOBILE OVERFLOW FIX — safe on small phones
-   --------------------------------------------------------- */
-
-/* Grid/flex children are allowed to shrink instead of forcing
-   their intrinsic content width outside the viewport. */
-.container,
-.hero-inner,
-.about-grid,
-.skills-grid,
-.timeline-cols,
-.certs-grid,
-.projects-grid,
-.contact-grid,
-.card,
-.project-body,
-.cert-body,
-.contact-form,
-.timeline,
-.contact-list,
-.contact-list li,
-.contact-list li > div,
-.project-top,
-.tl-head,
-.field {
-  min-width: 0;
-}
-
-/* Long email addresses, IDs, URLs, code and other unbroken
-   strings must wrap on narrow screens. */
-p,
-li,
-h1,
-h2,
-h3,
-h4,
-a,
-span,
-dfn,
-code,
-.project-body,
-.cert-body,
-.contact-list {
-  overflow-wrap: anywhere;
-  word-break: normal;
-}
-
-/* Keep images and embedded media inside their actual box. */
-img,
-picture,
-video,
-iframe {
-  max-width: 100%;
-}
-
-/* ---------------------------------------------------------
-   25.1 Small-screen layout
-   --------------------------------------------------------- */
+/* =========================================================
+   MOBILE FIX — Skills section overflow / broken bento columns
+   ========================================================= */
 @media (max-width: 700px) {
-  :root {
-    --gutter: 16px;
-  }
-
-  body {
+  #skills .skills-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
     width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-  }
-
-  .container {
-    width: 100%;
-    max-width: 100%;
-    padding-left: var(--gutter);
-    padding-right: var(--gutter);
-  }
-
-  .section {
-    padding-top: 64px;
-    padding-bottom: 64px;
-  }
-
-  .section-title {
-    max-width: 100%;
-    font-size: clamp(32px, 9.5vw, 48px);
-    line-height: 1;
-  }
-
-  .section-sub {
-    max-width: 100%;
-    font-size: 15px;
-    line-height: 1.65;
-  }
-
-  /* Hero */
-  .hero {
-    padding-top: 48px;
-    padding-bottom: 60px;
-  }
-
-  .hero h1.mega {
-    max-width: 100%;
-    font-size: clamp(38px, 12.5vw, 60px);
-    line-height: .92;
-    letter-spacing: -.055em;
-  }
-
-  .kword,
-  .hero h1.mega .kl {
-    white-space: normal;
-  }
-
-  .lede {
-    max-width: 100%;
-    font-size: 15.5px;
-    line-height: 1.65;
-  }
-
-  .hero-btns {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .hero-btns .btn {
-    max-width: 100%;
-  }
-
-  .hero-stats {
-    width: 100%;
-    max-width: 100%;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .hero-stats div {
     min-width: 0;
-    padding-left: 6px;
-    padding-right: 6px;
   }
 
-  .hero-stats dt {
-    white-space: normal;
+  #skills .skill-card,
+  #skills .skill-card:nth-child(1),
+  #skills .skill-card:nth-child(2),
+  #skills .skill-card:nth-child(3),
+  #skills .skill-card:nth-child(4),
+  #skills .skill-card:nth-child(5) {
+    grid-column: 1 / -1 !important;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  #skills .skill-head {
+    min-width: 0;
+    align-items: flex-start;
+  }
+
+  #skills .skill-head h3 {
+    min-width: 0;
     overflow-wrap: anywhere;
+    word-break: normal;
   }
 
-  /* All cards */
-  .card {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .skill-card,
-  .cert,
-  .project,
-  .contact-form {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  /* Project descriptions */
-  .project-body {
-    padding: 20px;
-  }
-
-  .project-body p {
-    max-width: 100%;
-    font-size: 14.5px;
-    line-height: 1.68;
-  }
-
-  .project-problem {
-    width: 100%;
-    max-width: 100%;
-    padding: 14px 15px;
-  }
-
-  .project-top {
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .project-top h3 {
+  #skills .chips {
     min-width: 0;
-    max-width: 100%;
-  }
-
-  .project-body .chips {
-    max-width: 100%;
-  }
-
-  .chips li {
-    max-width: 100%;
-  }
-
-  /* Timeline */
-  .timeline-cols {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .tl-head {
-    align-items: flex-start;
-  }
-
-  .tl-head h4 {
-    min-width: 0;
-    max-width: 100%;
-  }
-
-  .tl-date {
-    max-width: 100%;
-    white-space: normal;
-  }
-
-  .tl-points li {
-    min-width: 0;
-  }
-
-  /* Certificates */
-  .cert-body {
-    padding: 18px 20px 20px;
-  }
-
-  .cert-body h3 {
-    max-width: 100%;
-    font-size: 16px;
-    line-height: 1.25;
-  }
-
-  .cert-meta,
-  .cert-desc {
-    max-width: 100%;
-  }
-
-  /* Contact */
-  .contact-list li > div {
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-
-  .contact-list a,
-  .contact-list span {
-    max-width: 100%;
-  }
-
-  .contact-form {
-    padding: 20px;
-  }
-
-  .field input,
-  .field textarea {
-    max-width: 100%;
-  }
-
-  /* Footer */
-  .footer nav {
     width: 100%;
-    gap: 14px 18px;
   }
 
-  /* Hide decorative oversized numerals where they can compete
-     with content on very narrow screens. */
-  .ghost-num {
-    right: 8px;
-    max-width: 45vw;
-    overflow: hidden;
-  }
-
-  /* Keep decorative background layers from creating a visual
-     edge outside the viewport. */
-  .hero-bg,
-  .mesh,
-  .marquee-wrap {
-    max-width: 100vw;
+  #skills .chips li {
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
   }
 }
 
 @media (max-width: 480px) {
-  :root {
-    --gutter: 14px;
+  #skills .skill-head {
+    gap: 10px;
+    margin-bottom: 14px;
   }
 
-  .nav {
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-
-  .nav-inner {
-    padding: 8px 10px 8px 12px;
-    gap: 8px;
-  }
-
-  .hero {
-    padding-top: 40px;
-  }
-
-  .hero h1.mega {
-    font-size: clamp(35px, 12vw, 48px);
-  }
-
-  .hero-stats {
-    gap: 5px;
-  }
-
-  .hero-stats div {
-    padding: 13px 5px 12px;
-  }
-
-  .hero-stats dd {
-    font-size: 22px;
-  }
-
-  .hero-stats dt {
-    font-size: 9.5px;
-  }
-
-  .card {
-    border-radius: 18px;
-  }
-
-  .project-body,
-  .cert-body,
-  .contact-form {
-    padding: 18px;
-  }
-
-  .project-body p {
-    font-size: 14px;
-  }
-
-  .project-problem {
-    padding: 13px 14px;
-  }
-
-  .chips {
-    gap: 6px;
-  }
-
-  .chips li {
-    font-size: 12px;
-    padding: 5px 9px;
-  }
-
-  .tl-head {
-    gap: 6px;
-  }
-
-  .contact-list li {
-    gap: 11px;
-  }
-
-  .c-ico {
+  #skills .skill-ico {
     width: 36px;
     height: 36px;
     flex-basis: 36px;
   }
 
-  .contact-list a,
-  .contact-list span {
-    font-size: 14px;
-  }
-}
-
-/* Extra protection for extremely narrow devices. */
-@media (max-width: 360px) {
-  :root {
-    --gutter: 12px;
+  #skills .skill-card h3 {
+    font-size: 18px;
+    line-height: 1.2;
   }
 
-  .hero-stats dt {
-    font-size: 9px;
+  #skills .chips {
+    gap: 7px;
   }
 
-  .hero-stats dd {
-    font-size: 20px;
-  }
-
-  .project-body,
-  .cert-body,
-  .contact-form {
-    padding: 16px;
+  #skills .chips li {
+    padding: 7px 10px;
+    font-size: 13px;
   }
 }
