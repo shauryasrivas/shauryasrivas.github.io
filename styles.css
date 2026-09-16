@@ -1451,13 +1451,65 @@ html.is-ready .kinetic .kl {
 
 
 /* =========================================================
-   MOBILE FIX — Skills section overflow / broken bento columns
+   FINAL MOBILE FIX — SKILLS
+   Keeps the desktop bento layout, but switches the skills
+   section to a simple, safe column layout before it can
+   become too narrow on tablets/phones.
    ========================================================= */
-@media (max-width: 700px) {
+
+#skills .skills-grid,
+#skills .skill-card {
+  min-width: 0;
+}
+
+#skills .skill-head {
+  min-width: 0;
+}
+
+#skills .skill-head h3 {
+  min-width: 0;
+  flex: 1 1 auto;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+#skills .chips {
+  min-width: 0;
+  width: 100%;
+}
+
+#skills .chips li {
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+/* Tablet + mobile: never allow a skill card to become a
+   tiny fraction of the screen. */
+@media (max-width: 1100px) {
+  #skills .skills-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  #skills .skill-card,
+  #skills .skill-card:nth-child(1),
+  #skills .skill-card:nth-child(2),
+  #skills .skill-card:nth-child(3),
+  #skills .skill-card:nth-child(4),
+  #skills .skill-card:nth-child(5) {
+    grid-column: span 1 !important;
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* Phones: one full-width card per row. */
+@media (max-width: 760px) {
   #skills .skills-grid {
     grid-template-columns: minmax(0, 1fr) !important;
-    width: 100%;
-    min-width: 0;
+    gap: 14px;
   }
 
   #skills .skill-card,
@@ -1468,56 +1520,47 @@ html.is-ready .kinetic .kl {
   #skills .skill-card:nth-child(5) {
     grid-column: 1 / -1 !important;
     width: 100%;
-    min-width: 0;
     max-width: 100%;
   }
 
   #skills .skill-head {
-    min-width: 0;
-    align-items: flex-start;
-  }
-
-  #skills .skill-head h3 {
-    min-width: 0;
-    overflow-wrap: anywhere;
-    word-break: normal;
-  }
-
-  #skills .chips {
-    min-width: 0;
-    width: 100%;
-  }
-
-  #skills .chips li {
-    max-width: 100%;
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
-}
-
-@media (max-width: 480px) {
-  #skills .skill-head {
+    align-items: center;
     gap: 10px;
     margin-bottom: 14px;
   }
 
-  #skills .skill-ico {
-    width: 36px;
-    height: 36px;
-    flex-basis: 36px;
-  }
-
-  #skills .skill-card h3 {
-    font-size: 18px;
-    line-height: 1.2;
+  #skills .skill-head h3 {
+    font-size: 17px;
+    line-height: 1.25;
   }
 
   #skills .chips {
+    display: flex;
+    flex-wrap: wrap;
     gap: 7px;
   }
 
   #skills .chips li {
+    display: inline-flex;
+    width: auto;
+    max-width: 100%;
     padding: 7px 10px;
     font-size: 13px;
+    line-height: 1.25;
+  }
+}
+
+@media (max-width: 380px) {
+  #skills .skill-card {
+    padding: 18px;
+  }
+
+  #skills .skill-head h3 {
+    font-size: 16px;
+  }
+
+  #skills .chips li {
+    font-size: 12.5px;
+    padding: 6px 9px;
   }
 }
